@@ -11,7 +11,6 @@ export default{//random with same probability of appear
     }
     set.forEach((value) => arr.push(value));
     set = null;
-    // this.mix(arr);
     return arr;  
   },
   //utility functions
