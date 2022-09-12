@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sorting</title>
+  <script src="https://unpkg.com/vue@3"></script>
+  
+  <link rel="stylesheet" href="/src/css/theme.css">
+  <link rel="stylesheet" href="/dist/tailwind.css">
+</head>
+<body >
+  <!-- vue app container -->
+  <div class="h-screen fixed top-0 left-0 w-full flex flex-col" id="app">
+    <!-- navigation -->
+    <nav class="fixed z-30 top-0 left-0 h-16 w-full bg-white shadow-md backdrop-blur-sm" id="navbar">
+      <ul class="flex h-full mx-4 sm:mx-10 md:mx-20 lg:mx-36 xl:mx-44"
+      id="list">
+    
+        <li class="flex hover:border-b-2 hover:border-sky-500">
+          <button class="py-2 px-4" onclick="" id="tab1">
+            Calculations
+          </button>
+        </li>
+        <li class="flex hover:border-b-2 hover:border-sky-500">
+          <button class="py-2 px-4" id="tab2" onclick="">
+            Simulations
+          </button>
+        </li>
+        <div class="ml-auto self-center flex items-center mr-3">
+          <label for="Toggle1" class="inline-flex items-center space-x-4 cursor-pointer text-gray-100">
+            <span class="relative inline-flex items-center">
+              <input id="Toggle1" type="checkbox" class="hidden peer">
+              <div class="w-16 h-8 rounded-full shadow-inner bg-pink-700"></div>
+  
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 absolute top-50 left-0 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+              </svg>
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 absolute top-50 right-0 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+              </svg>
+  
+              <div class="absolute z-10 inset-y-0 left-0 w-6 h-6 m-1 rounded-full shadow peer-checked:right-0 peer-checked:left-auto bg-white"></div>
+            </span>
+          </label>
+        </div>
+      </ul>
+    </nav>
+    <!-- content -->
+    <main class="overflow-y-auto mt-16 grow bg-slate-100 py-8 sm:py-10  px-4 sm:px-10 md:px-20">
+      <!-- error alert -->
+      <div v-if="errorHead" class="flex items-center justify-between mb-8 max-w-3xl bg-red-500 rounded">
+        <div class="flex items-start">
+          <svg class="flex-shrink-0 ml-4 mr-2 w-4 h-4 mt-5 fill-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M2.93 17.07A10 10 0 1 1 17.07 2.93 10 10 0 0 1 2.93 17.07zm1.41-1.41A8 8 0 1 0 15.66 4.34 8 8 0 0 0 4.34 15.66zm9.9-8.49L11.41 10l2.83 2.83-1.41 1.41L10 11.41l-2.83 2.83-1.41-1.41L8.59 10 5.76 7.17l1.41-1.41L10 8.59l2.83-2.83 1.41 1.41z" /></svg>
+          <div class="py-4 text-white text-sm font-medium">
+            {{ errorHead || 'Error: undefined' }}
+            <span class="text-slate-100 font-normal block">{{ errorBody || 'undifined error' }}</span>
+          </div>
+        </div>
+        <button type="button" class="group mr-2 p-2" @click="errorHead = false">
+          <svg class="block w-2 h-2 fill-red-800 group-hover:fill-white" xmlns="http://www.w3.org/2000/svg" width="235.908" height="235.908" viewBox="278.046 126.846 235.908 235.908"><path d="M506.784 134.017c-9.56-9.56-25.06-9.56-34.62 0L396 210.18l-76.164-76.164c-9.56-9.56-25.06-9.56-34.62 0-9.56 9.56-9.56 25.06 0 34.62L361.38 244.8l-76.164 76.165c-9.56 9.56-9.56 25.06 0 34.62 9.56 9.56 25.06 9.56 34.62 0L396 279.42l76.164 76.165c9.56 9.56 25.06 9.56 34.62 0 9.56-9.56 9.56-25.06 0-34.62L430.62 244.8l76.164-76.163c9.56-9.56 9.56-25.06 0-34.62z" /></svg>
+        </button>
+      </div>
+      <!-- calculations tab -->
+      <div class="tab1 hidden">
+        <h1 class="text-3xl font-bold mb-5 ">Calculations</h1>
+        <div class="max-w-31 bg-white rounded shadow">
+          <form @submit.prevent="throttle(run,0)">
+          
+            <div class="flex flex-wrap -m-b-8 -mr-6 p-8 items-center">
+            
+                <div class="pb-8 pr-6 w-full lg:w-1/2 flex">
+                  <div class="grow lg:w-1/2">
+                    <label for="" class="form-label">Min Array Length</label>
+                    <input type="text" v-model="arrLength" placeholder="set a number" class="form-input ">
+                  </div>
+                  <span class="self-center mx-4"><br> to</span>
+                  <div class="lg:w-1/2">
+                    <label for="" class="form-label">Max</label>
+                    <input type="text" v-model="lengthMax" placeholder="set a number" class="form-input ">
+                  </div>
+                </div>
+                <div class="pb-8 pr-6 w-full lg:w-1/4">
+                  <label for="" class="form-label">How Many Columns</label>
+                  <input type="text" v-model="times" placeholder="set a number" class="form-input ">
+                </div>
+                <div class="pb-8 pr-6 w-full lg:w-1/4">
+                  <label for="" class="form-label">How Many Executions</label>
+                  <input type="text" v-model="executions" placeholder="set a number" class="form-input ">
+                </div>
+
+            </div>
+            <div class="flex items-center justify-end px-8 py-4 bg-gray-50 bar">
+              <button type="submit" :class="[loading ? 'pl-5 pr-8' : 'px-8']" :disabled="loading"
+              class="font-bold inline-flex items-center justify-center py-2 border border-transparent shadow-sm rounded-md text-white bg-pink-700 hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500">
+                <div v-if="loading" class="btn-spinner mr-2"></div>
+                Run
+              </button>
+          	</div>
+          </form>
+        </div>
+        <!-- results section -->
+        <h2 class="text-3xl font-bold my-5">Results</h2>
+        <div class="bg-white rounded-md shadow overflow-x-auto">
+          <table class="w-full whitespace-nowrap">
+            <tr class="text-left font-bold border-b">
+              <th class="pb-4 pt-6 px-6">Algorithm</th>
+              <th v-for="(column, i) in columns" :key="i" class="pb-4 pt-6 px-6">{{ `n${i+1} = ${column}` }}</th>
+            </tr>
+            <template v-for="(alg, i) in executionsTime" :key="i" class="">
+              <tr v-for="(exec, j) in alg" :key="j" class="hover:bg-gray-100 focus-within:bg-gray-100">
+                <td v-for="(result, k) in exec" :key="k" class="px-6 py-4"
+                :class="[j + 1 == executions ? 'border-b': 'border-b-0']"
+                >
+                  {{ result == '' || k == 0 ? result : result + ' ms' }}
+                  <!-- {{ `${i} ${j} ${k}` }} -->
+                </td>
+              </tr>
+            </template>
+            <tr v-if="executionsTime.length === 0">
+              <td class="px-6 py-4 border-t" colspan="4">No results yet.</td>
+            </tr>
+          </table>
+        </div>
+        <!-- averages section -->
+        <h2 class="text-3xl font-bold my-5">Averages</h2>
+        <div class="bg-white rounded-md shadow overflow-x-auto">
+          <table class="w-full whitespace-nowrap">
+            <tr class="text-left font-bold border-b">
+              <th class="pb-4 pt-6 px-6">Algorithm</th>
+              <th v-for="(column, i) in columns" :key="i" class="pb-4 pt-6 px-6">{{ `n${i+1} = ${column}` }}</th>
+            </tr>
+              <tr v-for="(row, j) in results" :key="j" class="hover:bg-gray-100 focus-within:bg-gray-100">
+                <td v-for="(result, k) in row" :key="k" class="px-6 py-4 border-b" >
+                  {{ k == 0 ? result : result + ' ms' }}
+                  <!-- {{ `${i} ${j} ${k}` }} -->
+                </td>
+              </tr>
+            <tr v-if="executionsTime.length === 0">
+              <td class="px-6 py-4 border-t" colspan="4">No results yet.</td>
+            </tr>
+          </table>
+        </div>
+        <!-- chart section -->
+        <h2 class="text-3xl font-bold my-5">Chart</h2>
+        <div class="max-w-31 bg-white rounded shadow" v-show="showChart">
+          <div class="flex flex-wrap p-4 sm:p-8 lg:p-16 items-center">
+            <canvas ref="chartResults">
+
+            </canvas>
+          </div>
+          <div class="flex items-center justify-between sm:justify-start px-8 py-4 bg-gray-50 bar">
+            <button type="submit" @click.prevent="chartActions(0)" ref="btn1"
+            class="font-normal inline-flex items-center justify-center mr-4 py-2 px-4 border border-transparent shadow-sm rounded-md text-gray-600 bg-gray-200 hover:bg-sky-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2">
+
+            </button>
+            <button type="submit" @click.prevent="chartActions(1)" ref="btn2"
+            class="font-normal inline-flex items-center justify-center mr-4 py-2 px-4 border border-transparent shadow-sm rounded-md text-gray-600 bg-gray-200 hover:bg-sky-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2">
+
+            </button>
+            <button type="submit" @click.prevent="chartActions(2)" ref="btn3"
+            class="font-normal inline-flex items-center justify-center py-2 px-4 border border-transparent shadow-sm rounded-md text-gray-600 bg-gray-200 hover:bg-sky-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2">
+
+            </button>
+          </div>
+        </div>
+        <div v-show="!showChart" class="max-w-31 bg-white rounded shadow">
+          <div class="flex flex-wrap px-6 py-4 items-center">
+            No results yet
+          </div>
+        </div>
+        <!-- test section -->
+        <h2 class="text-3xl font-bold my-5">Test</h2>
+        <div class="max-w-31 bg-white rounded shadow">
+          <div class="flex flex-wrap -m-b-8 -mr-6 p-8 items-center">
+            <div class="pb-8 pr-6 w-full lg:w-1/4">
+                <h4 class="form-label">Algorithms</h4>
+                <select v-model="selected" class="form-select">
+                  <option disabled value="">Please select one</option>
+                  <option v-for="(alg, i) in algorithms" :key="i">
+                    {{ alg }}
+                  </option>
+                </select>
+            </div>
+            <div class="pb-8 pr-6 w-full lg:w-1/4">
+              <label for="" class="form-label">Array Length</label>
+              <input type="text" v-model="testLength" placeholder="set a number" class="form-input ">
+            </div>
+            <div class="basis-full pb-8 pr-6">
+              <h5 class="text-xl my-3 form-label">Input</h5>
+              <div class="bg-gray-50 shadow-sm h-24 mb-5 p-8 overflow-y-auto bar">
+                {{ testInput }}
+              </div>
+              <h5 class="text-xl my-3 form-label">Output</h5>
+              <div class="bg-gray-50 shadow-sm h-24 overflow-y-auto p-8 bar">
+                {{ testOutput }}
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Simulation tab -->
+      <div class="tab2 hidden h-full">
+        <div class=" bg-white rounded shadow h-full flex flex-col">
+
+            <div class="flex flex-wrap items-center justify-between sm:justify-start px-8 py-4 bg-gray-50 bar">
+              <div class="sm:w-1/4 mr-4">
+                <select v-model="options" class="form-select" name="options" title="algorithm option">
+                  <option disabled value="">Please select one</option>
+                  <option v-for="(alg, i) in algorithms" :key="i">
+                    {{ alg }}
+                  </option>
+                </select>
+              </div>
+              <button type="submit" @click.prevent="() => isPlaying ? pause() : play()" ref="play"
+              :class="[isPlaying ? 'bg-sky-500 text-white' :'text-gray-600 bg-gray-200' ]" 
+              class="font-normal inline-flex items-center justify-center mr-4 py-2 px-4 border border-transparent shadow-sm rounded-md  hover:bg-sky-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2">
+                {{ !isPlaying ? 'Play' : isInPause ? 'Play' : 'Pause' }}
+              </button>
+              <button type="submit" @click.prevent="generateArray" :disabled="isPlaying"
+              class="font-normal inline-flex items-center justify-center py-2 px-4 border border-transparent shadow-sm rounded-md text-gray-600 bg-gray-200 hover:bg-sky-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2">
+                new Array
+              </button>
+              <div class="flex py-2 px-4 items-center">
+                <span>Size:</span> <input type="range" v-model="size" min="100" max="310" class="ml-2 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+              </div>
+              <div class="sm:w-1/4 flex py-2 px-4 items-center">
+                <span>Speed:</span> <input type="range" v-model="speed" min="1" max="60" class="ml-2 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+              </div>
+            </div>
+          
+            <div class="flex grow p-4 pb-4 pt-0 sm:px-8 sm:pb-8 gap-px" ref="simulations">
+             <div v-for="(elem, i) in unsortedArray" :key="i" class="flex-1"
+             :class="[i == index.i || i == index.ant || i == index.sig ? 'bg-red-500' : 'bg-cyan-300' ]"
+             :style="{height:HeigthMapper(elem)}"></div>
+            </div>
+
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js" integrity="sha512-ElRFoEQdI5Ht6kZvyzXhYG9NqjtkmlkfYk0wr6wHxU9JEHakS7UJZNeml5ALk+8IKlU6jDgMabC3vkumRokgJA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script type="module">
+    //export/import modules don't work without a server, so include the code in main.js here
+    //in methods section to make it work
+    const { createApp } = Vue;
+    import sort from "./js/main.js";
+    createApp({
+      mounted() {
+        this.options = this.algorithms[0];
+        this.generateArray();
+        let [border, bg] = [...this.getRandColors()];
+        this.columns = sort.getColumnsLength(this.arrLength, this.lengthMax, this.times);
+        this.chart = new Chart(this.$refs.chartResults.getContext('2d'), {
+          type: "line",
+          data: {
+            labels: this.columns,
+            datasets: []
+          },
+          options: {
+            legend: {display: false},
+            responsive: true,
+            plugins: {
+              title: {
+                display: true,
+                text: 'Algorithms Performance'
+              },
+            },
+            interaction: {
+              mode: 'index',
+              intersect: false
+            },
+            scales: {
+              x: {
+                display: true,
+                title: {
+                  display: true,
+                  text: 'input size'
+                }
+              },
+              y: {
+                display: true,
+                title: {
+                  display: true,
+                  text: 'time (ms)'
+                }
+              }
+            }
+          }
+        });
+      
+        this.actions = [
+          {
+            name: 'Mode: all',
+            handler(chart) {
+              chart.options.interaction.mode = 'index';
+              chart.update();
+            }
+          },
+          {
+            name: 'Mode: Per algorithm',
+            handler(chart) {
+              chart.options.interaction.mode = 'dataset';
+              chart.update();
+            }
+          },
+          {
+            name: 'Mode: Per Point',
+            handler(chart) {
+              chart.options.interaction.mode = 'point';
+              chart.update();
+            }
+          },
+
+        ];
+        this.$refs.btn1.innerHTML = this.actions[0].name;
+        this.$refs.btn2.innerHTML = this.actions[1].name;
+        this.$refs.btn3.innerHTML = this.actions[2].name;
+        // this.onResize();  
+      },
+      unmounted() {
+        this.columns = null;
+        this.chart = null;
+        window.removeEventListener('resize', this.onResize);
+      },
+      watch: {
+      // whenever selected changes, this function will run
+        selected() {
+          this.testOutput = sort.getUnrepetedArray(this.testLength);
+          this.testInput = this.testOutput.slice();
+          sort[this.selected](this.testOutput);
+        },
+
+      },
+      data(){
+        this.chart = null;
+        return {
+          isInPause: false,
+          speed: 30,
+          size: 100,
+          unsortedArray: '',
+          existAnArray: false,
+          options: '',
+          isPlaying: false,
+          minBarHeigth: 5,
+          maxBarHeigth: 100,
+          min: '',
+          max: '',
+          showChart: false,
+          actions: '',
+          loading: false,
+          throttlePause: false,
+          errorHead: '',
+          errorBody: '',
+          selected: '',
+          testLength: 10,
+          testInput: '',
+          testOutput: '',
+          arrLength: 300,
+          lengthMax: 400,
+          times: 7,
+          executions: 3,
+          columns: '',
+          auxColumns: [],
+          inputs: [],
+          executionsTime: [],
+          results: [],
+          algorithms: ['bubbleSort', 'selectionSort', 'quickSort', 'mergeSort'],
+          index: {
+            i: null,
+            ant: null,
+            sig: null,
+          }
+        }
+      },
+      
+      methods: {
+        async play() {
+          if(this.isPlaying) return;
+          if(!this.existAnArray) this.generateArray();
+          this.isPlaying = true;
+          console.log(this.isPlaying);
+          // this.bubbleSort(this.unsortedArray);
+          await this[this.options](this.unsortedArray);
+          console.log(this.options)
+          this.isPlaying = this.existAnArray = false;
+          console.log(this.isPlaying);
+        },
+        generateArray() {
+          this.unsortedArray = sort.getUnrepetedArray(this.size);
+          this.min = Math.min(...this.unsortedArray);
+          this.max = Math.max(...this.unsortedArray);
+          this.existAnArray = true;
+        },
+        HeigthMapper(value) {
+            let heigth = this.minBarHeigth + (value - this.min)*(this.maxBarHeigth - this.minBarHeigth)/(this.max - this.min);
+            return Math.round(heigth) + '%';
+        },
+        speedMapper(value) {
+          let m = (5 - 60) / (60 - 1); //slope - m
+          let speed = m*(+value - 1) + 50;
+          return speed;  //rect equation
+        },
+        pause() {
+          this.isInPause = true;
+        },
+        pauser() {
+          return new Promise(res => {
+            let play = () => {
+              this.$refs.play.removeEventListener('click', play);
+              this.isInPause = false;
+              res();
+            }
+            this.$refs.play.addEventListener('click', play);
+          })
+        },
+        async bubbleSort(arr) {
+          let greatest = 0;
+          let swaps = false;
+          let length = arr.length;
+          for(let i = 0; i < length; i++) {
+            for(let j = 0; j < length - (i + 1);  j++) {
+              greatest = arr[j];
+              if(greatest > arr[j + 1]) {
+                swaps = true;
+                [arr[j], arr[j + 1]] = [arr[j + 1], greatest];
+              }
+              this.index.i = i; this.index.ant = j; this.index.sig = j+1;
+              await new Promise((res) => setTimeout(res, this.speedMapper(this.speed)));
+              if(this.isInPause) await this.pauser();
+            }
+            if(!swaps) break;
+          }
+        },
+        async selectionSort(arr) {
+          let smallest = 0;
+          let smallest_index = 0;
+          let length = arr.length;
+          for(let i = 0; i < length; i++) {
+            smallest = arr[i];
+            smallest_index = i;
+            for(let j = i; j < length - 1; j++) {
+              if(arr[j+1] < smallest) {
+                smallest = arr[j + 1];
+                smallest_index = j + 1;
+              }
+              this.index.i = i; this.index.sig = j;
+              await new Promise((res) => setTimeout(res, this.speedMapper(this.speed)));
+              if(this.isInPause) await this.pauser();
+            }
+            [arr[smallest_index], arr[i]] = [arr[i], smallest];
+          }
+        },
+        async quickSort(arr) {
+          let left = 0, right = arr.length - 1;
+          let inner = async (arr, left, right) => {
+            let aux = left - 1;
+            let auxleft = left;
+            if(left >= right) return;
+            while(left < right) {
+              if(arr[left] < arr[right]) {
+                aux++
+                [arr[aux], arr[left]] = [arr[left], arr[aux]];
+                this.index.i = aux, this.index.ant = left, this.index.sig = right;
+                await new Promise((res) => setTimeout(res, this.speedMapper(this.speed)));
+                if(this.isInPause) await this.pauser();
+              }
+              left++;
+            }
+            [arr[aux + 1], arr[right]] = [arr[right], arr[aux + 1]];
+            await inner(arr, auxleft, aux);
+            await inner(arr, aux + 2, right);
+          }
+          await inner(arr, left, right);
+        },
+        async mergeSort(arr) {
+          let inner = async (arr, left, right) => {
+            let pivot = Math.floor(left + (right - left) / 2);
+            if(left >= right) return;
+            await inner(arr, left, pivot);
+            await inner(arr, pivot + 1, right);
+            await this.merge(arr, left, pivot, right);
+          }
+          await inner(arr, 0, arr.length - 1);
+        },
+        async merge(arr, left, leftEnd, right) {
+          let rightStart = leftEnd + 1; 
+          if(arr[leftEnd] <= arr[rightStart]) return;
+
+          while(left <= leftEnd && rightStart <= right) {
+            if(arr[left] <= arr[rightStart]) {
+              left++
+            } else {
+              let value = arr[rightStart] 
+              let auxIndex = rightStart;
+              //right shift
+              while(auxIndex != left) {
+                arr[auxIndex] = arr[auxIndex - 1];
+                auxIndex--;
+              }
+              arr[left] = value; 
+              //hide left element
+              left++;
+              //move index one space
+              leftEnd++;
+              rightStart++;
+
+              this.index.i = left, this.index.sig = leftEnd;
+              await new Promise((res) => setTimeout(res, this.speedMapper(this.speed)));
+              if(this.isInPause) await this.pauser();
+            }
+          }
+
+        },
+        run() {
+          console.log('run');
+          if(!this.validate()) return;
+          this.columns = sort.getColumnsLength(this.arrLength, this.lengthMax, this.times);
+          this.clearChart(this.columns);
+          this.getInputs(this.inputs, false,
+            (i,j,k) => {
+              let arr = sort.getUnrepetedArray(this.columns[k]);
+              return arr;
+            }, 
+          );
+          this.getInputs(
+            this.executionsTime, true,
+            (i, j, k) => {
+              let time = this.benchMarking(
+                sort[this.algorithms[i]].bind(sort),
+                this.inputs[i][j][k]
+              );
+              return time; 
+            }
+          );
+          this.chart.update();
+          this.showChart = true; 
+        },
+        getInputs(output, putAlgName, f){
+          let value, border, bg;
+          for(let i = 0; i < this.algorithms.length; i++) {
+            this.auxColumns = this.columns.map(() => 0);
+            if(putAlgName) {
+              this.results[i] = [];
+              this.results[i].push(this.algorithms[i]);
+            }
+            output[i] = [];
+            for(let j = 0; j < this.executions; j++) {
+              output[i][j] = [];
+              if(putAlgName) {
+                output[i][j].push(j == 0 ? this.algorithms[j+i] : '');   
+              }
+              for(let k = 0; k < this.columns.length; k++) {
+                value = f(i,j,k);
+                output[i][j].push(value);
+                if(putAlgName) {
+                  this.auxColumns[k] += +value;
+                  if(k == this.columns.length - 1 && j == this.executions - 1) {
+                    this.auxColumns = this.auxColumns.map((value) => (value / this.executions).toFixed(3));
+                    this.results[i].push(...this.auxColumns);
+                    [border, bg] = [...this.getRandColors()];
+                    this.chart.data.datasets.push(
+                      {
+                        label: this.algorithms[i],
+                        data: [...this.auxColumns],
+                        borderColor: border,
+                        borderWidth: 4,
+                        backgroundColor: bg,
+                        tension: 0.4,
+                      }
+                    );
+                  }
+                }
+              }
+            }
+          }
+        },
+        benchMarking(f, input) {
+          let start = Date.now();
+          f(input);
+          return (Date.now() - start).toFixed(3);
+        },
+        clearChart(columns) {
+          this.chart.data.labels.pop();
+          this.chart.data.labels = columns;
+          this.chart.data.datasets = [];
+        },
+        getRandColors() {
+          let randomColor = `rgba(${sort.randomInt(12,232)}, ${sort.randomInt(18,232)}, ${sort.randomInt(14,232)},`;
+          let border = randomColor + "0.35)";
+          let bg = randomColor + "1.0)";
+          return [border, bg];
+        },
+        chartActions(action) {
+          this.actions[+action].handler(this.chart);
+        },
+        validate() {
+          let resp = true;
+
+          if(this.lengthMax == '' || this.executions == '' || this.times == '' || this.arrLength == '') {
+            console.log(this.lengthMax, this.executions, this.times)
+            this.notshowError = resp = false;
+            this.errorHead = 'Error: All fields Are required';
+            this.errorBody = `Empty fields are not allowed`;
+          }else if(this.arrLength < 1 || this.lengthMax < 1 || this.executions < 1 || this.times < 1) {
+            this.notshowError = resp = false;
+            this.errorHead = 'Error: Negative or zero numbers are not allowed'
+            this.errorBody = `Only positive numbers greater than zero`;
+          }
+          if(isNaN(this.arrLength) || isNaN(this.lengthMax) || isNaN(this.executions) || isNaN(this.times) ) {
+            this.notshowError = resp = false;
+            this.errorHead = 'Error: Strings are not allowed'
+            this.errorBody = `Only positive numbers are allowed`;
+          }
+          if(+this.arrLength > +this.lengthMax) {
+            this.notshowError = resp = false;
+            this.errorHead = 'Error: Invalid Range'
+            this.errorBody = `min Array length: ${this.arrLength} must be >= than max: ${this.lengthMax}`;
+          }
+          setTimeout(() => this.errorHead = false, 5000);
+          return resp;
+        },
+        
+        async throttle(callback, time) {
+          //don't run the function if throttlePause is true
+          // if (this.throttlePause) return;
+          if(this.loading) return;
+          //set throttlePause to true after the if condition. This allows the function to be run once
+          // this.throttlePause = true;
+          this.loading = true;
+          await new Promise((res)=> {setTimeout(()=> {
+            callback();
+            res();
+          },time)}).finally(() => this.loading = false);  
+        },
+      },
+
+    }).mount('#app');
+  </script>
+  <script defer src="/src/js/page.js"></script>
+  <script defer src="/src/js/theme.js"></script>  
+</body>
+</html>
