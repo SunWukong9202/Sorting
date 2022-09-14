@@ -282,7 +282,7 @@
                 <div class="flex grow gap-px">
                   <div v-for="(elem, j) in data" :key="j" class="flex-1"
                   :class="[j == indexes[i].i || j == indexes[i].ant || j == indexes[i].sig ? 'bg-red-500' : 'bg-cyan-300' ]"
-                  :style="{height:HeigthMapper(elem)}"></div>
+                  :style="{height:HeigthMapperComp(elem)}"></div>
                 </div>
               </div>
               
@@ -301,6 +301,7 @@
       mounted() {
         this.options = this.algorithms[0];
         this.generateArray();
+        this.generateArrayForCompare();
         let [border, bg] = [...this.getRandColors()];
         this.columns = sort.getColumnsLength(this.arrLength, this.lengthMax, this.times);
         this.chart = new Chart(this.$refs.chartResults.getContext('2d'), {
@@ -393,12 +394,15 @@
           unsortedArray: '',
           unsortedArrayAux: '',
           existAnArray: false,
+          existAnArrayForComparing: false,
           options: '',
           isPlaying: false,
           minBarHeigth: 5,
           maxBarHeigth: 100,
           min: '',
           max: '',
+          minComp: '',
+          maxComp: '',
           showChart: false,
           actions: '',
           loading: false,
@@ -456,7 +460,7 @@
           if(this.isComparing) return;
           this.isComparing = true;
           let promises = [];
-          if(!this.existAnArray) this.generateArray();
+          if(!this.existAnArray) this.generateArrayForCompare();
           for(let i = 0; i < this.algorithms.length; i++) {
             promises.push(this[this.algorithms[i]](
               this.algorithmsAux[i], this.indexes[i],
@@ -464,7 +468,7 @@
               ));
           }
           Promise.all(promises).then(() => {
-            this.isComparing = this.existAnArray = false;
+            this.isComparing = this.existAnArrayForComparing = false;
           })
         },
         async play() {
@@ -476,16 +480,26 @@
         },
         generateArray() {
           this.unsortedArray = sort.getUnrepetedArray(this.size);
-          this.algorithmsAux = [this.unsortedArray.slice(),
-                                this.unsortedArray.slice(),
-                                this.unsortedArray.slice(),
-                                this.unsortedArray.slice()];
           this.min = Math.min(...this.unsortedArray);
           this.max = Math.max(...this.unsortedArray);
           this.existAnArray = true;
         },
+        generateArrayForCompare() {
+          let unsortedArray = sort.getUnrepetedArray(this.size);
+          this.algorithmsAux = [unsortedArray.slice(),
+                                unsortedArray.slice(),
+                                unsortedArray.slice(),
+                                unsortedArray.slice()];
+          this.minComp = Math.min(...unsortedArray);
+          this.maxComp = Math.max(...unsortedArray);
+          this.existAnArrayForComparing = true;
+        },
         HeigthMapper(value) {
             let heigth = this.minBarHeigth + (value - this.min)*(this.maxBarHeigth - this.minBarHeigth)/(this.max - this.min);
+            return Math.round(heigth) + '%';
+        },
+        HeigthMapperComp(value) {
+            let heigth = this.minBarHeigth + (value - this.minComp)*(this.maxBarHeigth - this.minBarHeigth)/(this.maxComp - this.minComp);
             return Math.round(heigth) + '%';
         },
         speedMapper(value) {
