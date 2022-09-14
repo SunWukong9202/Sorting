@@ -6,9 +6,7 @@ list.onclick = function(e) {
   if(target?.tagName != 'BUTTON') return;
   select(target)
 }
-
 function select(target) {
-  console.log(target.id)
   if(selectOption && tab){
     tab.classList?.remove('block');
     tab.classList?.add('hidden');
@@ -20,7 +18,6 @@ function select(target) {
   }
   selectOption = target;
   tab = document.querySelector(`.${target.id}`);
-  console.log(tab);
   tab.classList.add('block');
   tab.classList.remove('hidden');
   selectOption.classList.add('border-b-2');

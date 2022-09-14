@@ -6,8 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sorting</title>
   <script src="https://unpkg.com/vue@3.1.1/dist/vue.global.prod.js"></script>
-  <link rel="stylesheet" href="/src/css/theme.css">
-  <link rel="stylesheet" href="/dist/tailwind.css">
+  <link rel="stylesheet" href="./src/css/theme.css">
+  <link rel="stylesheet" href="./dist/tailwind.css">
 </head>
 <body >
   <!-- vue app container -->
@@ -16,15 +16,29 @@
     <nav class="fixed z-30 top-0 left-0 h-16 w-full bg-white shadow-md backdrop-blur-sm" id="navbar">
       <ul class="flex h-full mx-4 sm:mx-10 md:mx-20 lg:mx-36 xl:mx-44"
       id="list">
-    
+
         <li class="flex hover:border-b-2 hover:border-sky-500">
           <button class="py-2 px-4" onclick="" id="tab1">
-            Calculations
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="sm:hidden w-6 h-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
+            </svg>  
+            <span class="hidden sm:inline-block ">Calculations</span>          
           </button>
         </li>
         <li class="flex hover:border-b-2 hover:border-sky-500">
           <button class="py-2 px-4" id="tab2" onclick="">
-            Simulations
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="sm:hidden w-6 h-6 rotate-180">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 14.25v2.25m3-4.5v4.5m3-6.75v6.75m3-9v9M6 20.25h12A2.25 2.25 0 0020.25 18V6A2.25 2.25 0 0018 3.75H6A2.25 2.25 0 003.75 6v12A2.25 2.25 0 006 20.25z" />
+            </svg>            
+            <span class="hidden sm:inline-block">Simulations</span>
+          </button>
+        </li>
+        <li class="flex hover:border-b-2 hover:border-sky-500">
+          <button class="py-2 px-4" id="tab3" onclick="">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="sm:hidden w-6 h-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v17.25m0 0c-1.472 0-2.882.265-4.185.75M12 20.25c1.472 0 2.882.265 4.185.75M18.75 4.97A48.416 48.416 0 0012 4.5c-2.291 0-4.545.16-6.75.47m13.5 0c1.01.143 2.01.317 3 .52m-3-.52l2.62 10.726c.122.499-.106 1.028-.589 1.202a5.988 5.988 0 01-2.031.352 5.988 5.988 0 01-2.031-.352c-.483-.174-.711-.703-.59-1.202L18.75 4.971zm-16.5.52c.99-.203 1.99-.377 3-.52m0 0l2.62 10.726c.122.499-.106 1.028-.589 1.202a5.989 5.989 0 01-2.031.352 5.989 5.989 0 01-2.031-.352c-.483-.174-.711-.703-.59-1.202L5.25 4.971z" />
+            </svg>            
+            <span class="hidden sm:inline-block">Comparations</span>
           </button>
         </li>
         <div class="ml-auto self-center flex items-center mr-3">
@@ -149,17 +163,17 @@
 
             </canvas>
           </div>
-          <div class="flex items-center justify-between sm:justify-start px-8 py-4 bg-gray-50 bar">
+          <div class="flex items-center flex-wrap justify-between sm:justify-start px-8 py-4 bg-gray-50 bar">
             <button type="submit" @click.prevent="chartActions(0)" ref="btn1"
-            class="font-normal inline-flex items-center justify-center mr-4 py-2 px-4 border border-transparent shadow-sm rounded-md text-gray-600 bg-gray-200 hover:bg-sky-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2">
+            class="font-normal inline-flex items-center justify-center sm:mr-4 py-2 px-4 border border-transparent shadow-sm rounded-md text-gray-600 bg-gray-200 hover:bg-sky-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2">
 
             </button>
             <button type="submit" @click.prevent="chartActions(1)" ref="btn2"
-            class="font-normal inline-flex items-center justify-center mr-4 py-2 px-4 border border-transparent shadow-sm rounded-md text-gray-600 bg-gray-200 hover:bg-sky-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2">
+            class="font-normal inline-flex items-center justify-center sm:mr-4 py-2 px-4 border border-transparent shadow-sm rounded-md text-gray-600 bg-gray-200 hover:bg-sky-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2">
 
             </button>
             <button type="submit" @click.prevent="chartActions(2)" ref="btn3"
-            class="font-normal inline-flex items-center justify-center py-2 px-4 border border-transparent shadow-sm rounded-md text-gray-600 bg-gray-200 hover:bg-sky-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2">
+            class="font-normal inline-flex items-center mt-4 sm:mt-0 grow sm:grow-0 justify-center py-2 px-4 border border-transparent shadow-sm rounded-md text-gray-600 bg-gray-200 hover:bg-sky-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2">
 
             </button>
           </div>
@@ -205,8 +219,8 @@
       <div class="tab2 hidden h-full">
         <div class=" bg-white rounded shadow h-full flex flex-col">
 
-            <div class="flex flex-wrap items-center justify-between sm:justify-start px-8 py-4 bg-gray-50 bar">
-              <div class="sm:w-1/4 mr-4">
+            <div class="flex flex-wrap items-center justify-between sm:justify-start px-4 sm:px-8 py-4 bg-gray-50 bar">
+              <div class="w-full sm:w-1/4 sm:mr-4 mb-4 sm:mb-0">
                 <select v-model="options" class="form-select" name="options" title="algorithm option">
                   <option disabled value="">Please select one</option>
                   <option v-for="(alg, i) in algorithms" :key="i">
@@ -214,27 +228,64 @@
                   </option>
                 </select>
               </div>
-              <button type="submit" @click.prevent="() => isPlaying ? pause() : play()" ref="play"
+              <button type="submit" @click.prevent="() => isPlaying ? pause(isInPause) : play()" ref="play"
               :class="[isPlaying ? 'bg-sky-500 text-white' :'text-gray-600 bg-gray-200' ]" 
               class="font-normal inline-flex items-center justify-center mr-4 py-2 px-4 border border-transparent shadow-sm rounded-md  hover:bg-sky-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2">
-                {{ !isPlaying ? 'Play' : isInPause ? 'Play' : 'Pause' }}
+                {{ !isPlaying ? 'Play' : isInPause.id ? 'Play' : 'Pause' }}
               </button>
               <button type="submit" @click.prevent="generateArray" :disabled="isPlaying"
               class="font-normal inline-flex items-center justify-center py-2 px-4 border border-transparent shadow-sm rounded-md text-gray-600 bg-gray-200 hover:bg-sky-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2">
                 new Array
               </button>
-              <div class="flex py-2 px-4 items-center">
-                <span>Size:</span> <input type="range" v-model="size" min="100" max="310" class="ml-2 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+              <div class="flex py-2 sm:px-4 items-center">
+                <span>Size:</span> <input type="range" v-model="size" min="50" max="150" class="ml-2 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
               </div>
-              <div class="sm:w-1/4 flex py-2 px-4 items-center">
+              <div class="sm:w-1/4 flex py-2 sm:px-4 items-center">
                 <span>Speed:</span> <input type="range" v-model="speed" min="1" max="60" class="ml-2 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
               </div>
             </div>
           
-            <div class="flex grow p-4 pb-4 pt-0 sm:px-8 sm:pb-8 gap-px" ref="simulations">
+            <div class="flex grow p-4 pb-4 pt-0 sm:px-8 sm:pb-8 gap-px">
              <div v-for="(elem, i) in unsortedArray" :key="i" class="flex-1"
              :class="[i == index.i || i == index.ant || i == index.sig ? 'bg-red-500' : 'bg-cyan-300' ]"
              :style="{height:HeigthMapper(elem)}"></div>
+            </div>
+
+        </div>
+      </div>
+
+      <!-- comparations tab -->
+      <div class="tab3 hidden h-full">
+        <div class=" bg-white rounded shadow h-full flex flex-col">
+
+            <div class="flex flex-wrap items-center justify-between sm:justify-start px-4 sm:px-8 py-4 bg-gray-50 bar">
+              <button type="submit" @click.prevent="() => isComparing ? pause(isInPauseComparing) : compare()"  ref="compare"
+              :class="[isComparing ? 'bg-sky-500 text-white' :'text-gray-600 bg-gray-200' ]" 
+              class="font-normal inline-flex items-center justify-center mr-4 py-2 px-4 border border-transparent shadow-sm rounded-md  hover:bg-sky-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2">
+                {{ !isComparing ? 'Play' : isInPauseComparing.id ? 'Play' : 'Pause' }}
+              </button>
+              <button type="submit" @click.prevent="generateArray" :disabled="isComparing"
+              class="font-normal inline-flex items-center justify-center py-2 px-4 border border-transparent shadow-sm rounded-md text-gray-600 bg-gray-200 hover:bg-sky-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2">
+                new Array
+              </button>
+              <div class="flex py-2 sm:px-4 items-center">
+                <span>Size:</span> <input type="range" v-model="size" min="50" max="150" class="ml-2 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+              </div>
+              <div class="sm:w-1/4 flex py-2 sm:px-4 items-center">
+                <span>Speed:</span> <input type="range" v-model="speed" min="1" max="60" class="ml-2 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+              </div>
+            </div>
+
+            <div class="flex grow flex-wrap p-4 sm:p-8 gap-8">
+              <div v-for="(data,i) in algorithmsAux" :key="i" class="flex flex-col flex-1 basis-1/2 md:basis-1/3 gap-px" ref="comparations">
+                <h5 class="text-gray-300 mb-4">{{ algorithms[i] }}</h5>
+                <div class="flex grow gap-px">
+                  <div v-for="(elem, j) in data" :key="j" class="flex-1"
+                  :class="[j == indexes[i].i || j == indexes[i].ant || j == indexes[i].sig ? 'bg-red-500' : 'bg-cyan-300' ]"
+                  :style="{height:HeigthMapper(elem)}"></div>
+                </div>
+              </div>
+              
             </div>
 
         </div>
@@ -244,10 +295,8 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js" integrity="sha512-ElRFoEQdI5Ht6kZvyzXhYG9NqjtkmlkfYk0wr6wHxU9JEHakS7UJZNeml5ALk+8IKlU6jDgMabC3vkumRokgJA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script type="module">
-    //export/import modules don't work without a server, so include the code in main.js here
-    //in methods section to make it work
     const { createApp } = Vue;
-    import sort from "/src/js/main.js";
+    import sort from "./src/js/main.js";
     createApp({
       mounted() {
         this.options = this.algorithms[0];
@@ -319,12 +368,10 @@
         this.$refs.btn1.innerHTML = this.actions[0].name;
         this.$refs.btn2.innerHTML = this.actions[1].name;
         this.$refs.btn3.innerHTML = this.actions[2].name;
-        // this.onResize();  
       },
       unmounted() {
         this.columns = null;
         this.chart = null;
-        window.removeEventListener('resize', this.onResize);
       },
       watch: {
       // whenever selected changes, this function will run
@@ -338,10 +385,13 @@
       data(){
         this.chart = null;
         return {
-          isInPause: false,
+          isComparing: false,
+          isInPause: {id: false},
+          isInPauseComparing: {id: false},
           speed: 30,
           size: 100,
           unsortedArray: '',
+          unsortedArrayAux: '',
           existAnArray: false,
           options: '',
           isPlaying: false,
@@ -365,32 +415,71 @@
           executions: 3,
           columns: '',
           auxColumns: [],
+          arraysByCol: [],
           inputs: [],
           executionsTime: [],
           results: [],
           algorithms: ['bubbleSort', 'selectionSort', 'quickSort', 'mergeSort'],
+          algorithmsAux: [],
           index: {
             i: null,
             ant: null,
             sig: null,
-          }
+          },
+          indexes: [
+            {
+              i: null,
+              ant: null,
+              sig: null,
+            },
+            {
+              i: null,
+              ant: null,
+              sig: null,
+            },
+            {
+              i: null,
+              ant: null,
+              sig: null,
+            },
+            {
+              i: null,
+              ant: null,
+              sig: null,
+            },
+          ],
         }
       },
       
       methods: {
+        compare() {
+          if(this.isComparing) return;
+          this.isComparing = true;
+          let promises = [];
+          if(!this.existAnArray) this.generateArray();
+          for(let i = 0; i < this.algorithms.length; i++) {
+            promises.push(this[this.algorithms[i]](
+              this.algorithmsAux[i], this.indexes[i],
+              this.isInPauseComparing, this.$refs.compare
+              ));
+          }
+          Promise.all(promises).then(() => {
+            this.isComparing = this.existAnArray = false;
+          })
+        },
         async play() {
           if(this.isPlaying) return;
           if(!this.existAnArray) this.generateArray();
           this.isPlaying = true;
-          console.log(this.isPlaying);
-          // this.bubbleSort(this.unsortedArray);
-          await this[this.options](this.unsortedArray);
-          console.log(this.options)
+          await this[this.options](this.unsortedArray,this.index, this.isInPause, this.$refs.play);
           this.isPlaying = this.existAnArray = false;
-          console.log(this.isPlaying);
         },
         generateArray() {
           this.unsortedArray = sort.getUnrepetedArray(this.size);
+          this.algorithmsAux = [this.unsortedArray.slice(),
+                                this.unsortedArray.slice(),
+                                this.unsortedArray.slice(),
+                                this.unsortedArray.slice()];
           this.min = Math.min(...this.unsortedArray);
           this.max = Math.max(...this.unsortedArray);
           this.existAnArray = true;
@@ -400,24 +489,24 @@
             return Math.round(heigth) + '%';
         },
         speedMapper(value) {
-          let m = (5 - 60) / (60 - 1); //slope - m
-          let speed = m*(+value - 1) + 50;
+          let m = (1 - 80) / (60 - 1); //slope - m
+          let speed = m*(+value - 1) + 80;
           return speed;  //rect equation
         },
-        pause() {
-          this.isInPause = true;
+        pause(pauseId) {
+          pauseId.id = true;
         },
-        pauser() {
+        pauser(pauseId, playButton) {
           return new Promise(res => {
             let play = () => {
-              this.$refs.play.removeEventListener('click', play);
-              this.isInPause = false;
+              playButton.removeEventListener('click', play);
+              pauseId.id = false;
               res();
             }
-            this.$refs.play.addEventListener('click', play);
+            playButton.addEventListener('click', play);
           })
         },
-        async bubbleSort(arr) {
+        async bubbleSort(arr, index, pauseId, playButton) {
           let greatest = 0;
           let swaps = false;
           let length = arr.length;
@@ -428,14 +517,14 @@
                 swaps = true;
                 [arr[j], arr[j + 1]] = [arr[j + 1], greatest];
               }
-              this.index.i = i; this.index.ant = j; this.index.sig = j+1;
+              index.i = i; index.ant = j; index.sig = j+1;
               await new Promise((res) => setTimeout(res, this.speedMapper(this.speed)));
-              if(this.isInPause) await this.pauser();
+              if(pauseId.id) await this.pauser(pauseId, playButton);
             }
             if(!swaps) break;
           }
         },
-        async selectionSort(arr) {
+        async selectionSort(arr, index, pauseId, playButton) {
           let smallest = 0;
           let smallest_index = 0;
           let length = arr.length;
@@ -447,14 +536,14 @@
                 smallest = arr[j + 1];
                 smallest_index = j + 1;
               }
-              this.index.i = i; this.index.sig = j;
+              index.i = i; index.sig = j;
               await new Promise((res) => setTimeout(res, this.speedMapper(this.speed)));
-              if(this.isInPause) await this.pauser();
+              if(pauseId.id) await this.pauser(pauseId, playButton);
             }
             [arr[smallest_index], arr[i]] = [arr[i], smallest];
           }
         },
-        async quickSort(arr) {
+        async quickSort(arr, index, pauseId, playButton) {
           let left = 0, right = arr.length - 1;
           let inner = async (arr, left, right) => {
             let aux = left - 1;
@@ -464,9 +553,9 @@
               if(arr[left] < arr[right]) {
                 aux++
                 [arr[aux], arr[left]] = [arr[left], arr[aux]];
-                this.index.i = aux, this.index.ant = left, this.index.sig = right;
+                index.i = aux, index.ant = left, index.sig = right;
                 await new Promise((res) => setTimeout(res, this.speedMapper(this.speed)));
-                if(this.isInPause) await this.pauser();
+                if(pauseId.id) await this.pauser(pauseId, playButton);
               }
               left++;
             }
@@ -476,17 +565,17 @@
           }
           await inner(arr, left, right);
         },
-        async mergeSort(arr) {
+        async mergeSort(arr, index, pauseId, playButton) {
           let inner = async (arr, left, right) => {
             let pivot = Math.floor(left + (right - left) / 2);
             if(left >= right) return;
             await inner(arr, left, pivot);
             await inner(arr, pivot + 1, right);
-            await this.merge(arr, left, pivot, right);
+            await this.merge(arr, left, pivot, right, index, pauseId, playButton);
           }
           await inner(arr, 0, arr.length - 1);
         },
-        async merge(arr, left, leftEnd, right) {
+        async merge(arr, left, leftEnd, right, index, pauseId, playButton) {
           let rightStart = leftEnd + 1; 
           if(arr[leftEnd] <= arr[rightStart]) return;
 
@@ -508,21 +597,27 @@
               leftEnd++;
               rightStart++;
 
-              this.index.i = left, this.index.sig = leftEnd;
+              index.i = left, index.sig = leftEnd;
               await new Promise((res) => setTimeout(res, this.speedMapper(this.speed)));
-              if(this.isInPause) await this.pauser();
+              if(pauseId.id) await this.pauser(pauseId, playButton);
             }
           }
 
         },
+        getArrayByColumn(index) {
+          if(this.arraysByCol[index] == null){
+            this.arraysByCol[index] = sort.getUnrepetedArray(this.columns[index]);
+          }  
+          return this.arraysByCol[index].slice();
+        },
         run() {
-          console.log('run');
           if(!this.validate()) return;
+          this.arraysByCol = this.arraysByCol.map(() => null);
           this.columns = sort.getColumnsLength(this.arrLength, this.lengthMax, this.times);
           this.clearChart(this.columns);
           this.getInputs(this.inputs, false,
             (i,j,k) => {
-              let arr = sort.getUnrepetedArray(this.columns[k]);
+              let arr = this.getArrayByColumn(k);
               return arr;
             }, 
           );
@@ -601,7 +696,6 @@
           let resp = true;
 
           if(this.lengthMax == '' || this.executions == '' || this.times == '' || this.arrLength == '') {
-            console.log(this.lengthMax, this.executions, this.times)
             this.notshowError = resp = false;
             this.errorHead = 'Error: All fields Are required';
             this.errorBody = `Empty fields are not allowed`;
@@ -625,11 +719,7 @@
         },
         
         async throttle(callback, time) {
-          //don't run the function if throttlePause is true
-          // if (this.throttlePause) return;
           if(this.loading) return;
-          //set throttlePause to true after the if condition. This allows the function to be run once
-          // this.throttlePause = true;
           this.loading = true;
           await new Promise((res)=> {setTimeout(()=> {
             callback();
@@ -640,7 +730,7 @@
 
     }).mount('#app');
   </script>
-  <script defer src="/src/js/page.js"></script>
-  <script defer src="/src/js/theme.js"></script>  
+  <script defer src="./src/js/page.js"></script>
+  <script defer src="./src/js/theme.js"></script>  
 </body>
 </html>

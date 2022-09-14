@@ -12,11 +12,13 @@
 }
 
 .dark .tab2 > div,
-.dark .tab1 > div {
+.dark .tab1 > div,
+.dark .tab3 > div {
   background: #1f2937c6;
 }
 
-.dark > .tab2 select {
+.dark > .tab2 select,
+.dark > .tab3 select {
   background-color: #0f172a;
   color: #fff;
 }
