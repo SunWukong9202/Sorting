@@ -460,7 +460,7 @@
           if(this.isComparing) return;
           this.isComparing = true;
           let promises = [];
-          if(!this.existAnArray) this.generateArrayForCompare();
+          if(!this.existAnArrayForComparing) this.generateArrayForCompare();
           for(let i = 0; i < this.algorithms.length; i++) {
             promises.push(this[this.algorithms[i]](
               this.algorithmsAux[i], this.indexes[i],
